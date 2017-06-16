@@ -41,12 +41,12 @@
                             <div class="col-md-8 col-sm-8 col-xs-6">
                                 <h1 class="song-name">{{$data[0]->file_name}}</h1>
                                 <h2 class="song-singer">
-                                    <a href="/dj/marnik-2000290.html" title="Marnik">{{$data[0]->artist_name}}</a>
-                                    + <a href="/dj/don-diablo-2000573.html" title="Don Diablo">Don Diablo</a>
+                                    <a href="{{url('artist',['name'=>$data[0]->slug_name_artist])}}" title="{{$data[0]->artist_name}}">{{$data[0]->artist_name}}</a>
+                                    
                                 </h2>
                                 <div class="tags">
                                     <ul class="list-inline">
-                                        <li><a class="btn btn-tag btn-xs" href="/genre/dance-2000004.html"
+                                        <li><a class="btn btn-tag btn-xs" href="{{url('genres',['name'=>$data[0]->gen_name])}}"
                                                role="button">#{{strtoupper($data[0]->gen_name)}}</a></li>
                                     </ul>
                                 </div>
@@ -67,7 +67,7 @@
 
                                         <li><a href="javascript:void(0)" data-object-id="2000252"
                                                data-object-type="edm_video" title="Share" class="btn btn-outline"
-                                               data-link-share="http://mix166.com/videos/children-of-a-miracle-2000252.html"
+                                               data-link-share="{{url('file',['name'=>$data[0]->slug_name_file])}}"
                                                onclick="shareLink(this);"><i class="glyph-icon flaticon-connection"></i>
                                                 share</a></li>
                                     </ul>

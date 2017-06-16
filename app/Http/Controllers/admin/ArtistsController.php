@@ -64,6 +64,8 @@ class ArtistsController extends Controller
         $filename = 'fileupload/image/' . "$d-$m-$y-$s-$mm-$h.jpg";
         $this->saveImage($filename);
         $artist->image = $filename;
+        $artist->slug_name = $this->stripUnicode($request->name);
+
         $artist->save();
         return redirect('admin/artist/list');
     }
@@ -78,6 +80,22 @@ class ArtistsController extends Controller
 
         return redirect('admin/artist/list');
     }
+    function stripUnicode($str)
+    {
+        if (!$str) return false;
+        $unicode = array(
+            'a' => 'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
+            'd' => 'đ',
+            'e' => 'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
+            'i' => 'í|ì|ỉ|ĩ|ị',
+            'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
+            'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
+            'y' => 'ý|ỳ|ỷ|ỹ|ỵ',
+            '-' => ' ',
+        );
+        foreach ($unicode as $nonUnicode => $uni) $str = preg_replace("/($uni)/i", $nonUnicode, $str);
+        return $str;
+    }
     public function edit($id)
     {
         $value = Artist::find($id)->toArray();
@@ -88,7 +106,7 @@ class ArtistsController extends Controller
         $artist  = Artist::find($request->id);
         $artist2 = Artist::find($request->id)->toArray();
 
-        $artist->name = $request->name;
+        $artist->slug_name = $this->stripUnicode($request->name);
         $image        = $request->file('image');
         if ($image->getClientOriginalName() != '') {
             unlink($artist2['image']);

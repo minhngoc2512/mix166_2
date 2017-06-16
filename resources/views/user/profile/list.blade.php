@@ -113,7 +113,7 @@
                                                         <div class="playlist">
                                                             <div class="thumb">
                                                                 <div class="global-figure">
-                                                                    <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                    <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                        title="{{$data->file_name}}"
                                                                        class="global-image">
                                                                         <span style="background-image: url({{asset($data->path_image)}})"></span>
@@ -122,11 +122,11 @@
                                                             </div>
                                                             <div class="caption">
                                                                 <h2 class="global-name">
-                                                                    <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                    <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                        title="{{$data->file_name}}">{{$data->file_name}}</a>
                                                                 </h2>
                                                                 <h3 class="global-author">
-                                                                    <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->artist_name}}">{{$data->artist_name}} </a>
+                                                                    <a href="{{url('artists',['name'=>$data->slug_name_artist])}}" title="{{$data->artist_name}}">{{$data->artist_name}} </a>
                                                                 </h3>
                                                             </div>
                                                         </div>
@@ -148,7 +148,7 @@
                                                         <div class="thumb">
                                                             <div class="global-figure">
                                                                 <div class="global-image">
-                                                                    <a href="{{url('file',['id'=>$data->file_id])}}"><span
+                                                                    <a href="{{url('file',['name'=>$data->slug_name_file])}}"><span
                                                                                 style="background-image: url({{asset($data->path_image)}}); width: 80px; height: 80px;"></span></a>
                                                                 </div>
                                                             </div>
@@ -156,14 +156,14 @@
                                                     </div>
                                                     <div class="media-body">
                                                         <h2 class="global-name"><a
-                                                                    href="{{url('file',['id'=>$data->file_id])}}"
+                                                                    href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                     title="{{$data->file_name}}">{{$data->file_name}}</a></h2>
                                                         <h3 class="global-author">
-                                                            <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
+                                                            <a href="{{url('artists',['name'=>$data->slug_name_artist])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
 
                                                         </h3>
                                                         <h3 class="global-tag">
-                                                            <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->gen_name}}">{{$data->gen_name}}</a>
+                                                            <a href="{{url('genres',['name'=>$data->gen_name])}}" title="{{$data->gen_name}}">{{$data->gen_name}}</a>
                                                         </h3>
                                                     </div>
                                                     <div class="media-right">
@@ -207,13 +207,13 @@
                                                                     <div class="thumb">
                                                                         <div class="global-figure">
                                                                             <div class="global-image">
-                                                                                <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                                <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                                    title="{{$data->file_name}}">
                                                                                     <span style="background-image: url({{asset($data->image_video)}})"></span>
                                                                                 </a>
                                                                             </div>
                                                                         </div>
-                                                                        <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                        <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                            title="{{$data->file_name}}" class="global-action">
                                                                   <span class="video-play">
                                                                     <i class="flaticon-arrows"></i>
@@ -224,12 +224,12 @@
                                                                 </div>
                                                                 <div class="caption">
                                                                     <h1 class="global-name">
-                                                                        <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                        <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                            title="{{$data->file_name}}">{{$data->file_name}}</a>
                                                                     </h1>
                                                                     <h2 class="global-author">
                                                             <span>by
-                                                              <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
+                                                              <a href="{{url('artists',['name'=>$data->slug_name_artist])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
                                                             </span>
                                                                     </h2>
                                                                     <span class="total-views">
@@ -276,7 +276,7 @@
                                                     <div class="playlist">
                                                         <div class="thumb">
                                                             <div class="global-figure">
-                                                                <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                    title="{{$data->file_name}}"
                                                                    class="global-image">
                                                                     <span style="background-image: url({{asset($data->path_image)}})"></span>
@@ -285,11 +285,11 @@
                                                         </div>
                                                         <div class="caption">
                                                             <h2 class="global-name">
-                                                                <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                <a href="{{url('file',['name'=>$data->file_id])}}"
                                                                    title="{{$data->file_name}}">{{$data->file_name}}</a>
                                                             </h2>
                                                             <h3 class="global-author">
-                                                                <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->artist_name}}">{{$data->artist_name}} </a>
+                                                                <a href="{{url('artists',['name'=>$data->slug_name_artist])}}" title="{{$data->artist_name}}">{{$data->artist_name}} </a>
                                                             </h3>
                                                         </div>
                                                     </div>
@@ -311,7 +311,7 @@
                                                     <div class="thumb">
                                                         <div class="global-figure">
                                                             <div class="global-image">
-                                                                <a href="{{url('file',['id'=>$data->file_id])}}"><span
+                                                                <a href="{{url('file',['name'=>$data->slug_name_file])}}"><span
                                                                             style="background-image: url({{asset($data->path_image)}}); width: 80px; height: 80px;"></span></a>
                                                             </div>
                                                         </div>
@@ -322,11 +322,11 @@
                                                                 href="{{$data->file_name}}"
                                                                 title="{{$data->file_name}}">{{$data->file_name}}</a></h2>
                                                     <h3 class="global-author">
-                                                        <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
+                                                        <a href="{{url('artists',[''=>$data->slug_name_artist])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
 
                                                     </h3>
                                                     <h3 class="global-tag">
-                                                        <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->gen_name}}">{{$data->gen_name}}</a>
+                                                        <a href="{{url('genres',['name'=>$data->gen_name])}}" title="{{$data->gen_name}}">{{$data->gen_name}}</a>
                                                     </h3>
                                                 </div>
                                                 <div class="media-right">
@@ -366,7 +366,7 @@
                                                         <div class="thumb">
                                                             <div class="global-figure">
                                                                 <div class="global-image">
-                                                                    <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                                    <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                        title="{{$data->file_name}}">
                                                                         <span style="background-image: url({{asset($data->image_video)}})"></span>
                                                                     </a>
@@ -383,12 +383,12 @@
                                                     </div>
                                                     <div class="caption">
                                                         <h1 class="global-name">
-                                                            <a href="{{url('file',['id'=>$data->file_id])}}"
+                                                            <a href="{{url('file',['name'=>$data->slug_name_file])}}"
                                                                title="{{$data->file_name}}">{{$data->file_name}}</a>
                                                         </h1>
                                                         <h2 class="global-author">
                                                             <span>by
-                                                              <a href="{{url('file',['id'=>$data->file_id])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
+                                                              <a href="{{url('artists',[''=>$data->slug_name_artist])}}" title="{{$data->artist_name}}">{{$data->artist_name}}</a>
                                                             </span>
                                                         </h2>
                                                             <span class="total-views">
@@ -437,7 +437,7 @@
                                                 <div class="thumb">
                                                     <div class="global-figure">
                                                         <div class="global-image">
-                                                            <a href="{{url('file',['id'=>$value->file_id])}}"
+                                                            <a href="{{url('file',['name'=>$value->slug_name_file])}}"
                                                                title="{{$value->name_file}}"><span
                                                                         style="background-image: url({{asset($value->image_path)}}); width: 65px; height: 65px;"></span></a>
                                                         </div>
@@ -446,13 +446,13 @@
                                             </div>
                                             <div class="media-right">
                                                 <h2 class="global-name"><a
-                                                            href="{{url('file',['id'=>$value->file_id])}}"
+                                                            href="{{url('file',['name'=>$value->slug_name_file])}}"
                                                             title="{{$value->name_file}}"></a></h2>
                                                 <h3 class="global-author">
-                                                    <a href="/">{{$value->name_artist}}</a>
+                                                    <a href="{{url('artists',['name'=>$value->slug_name_artist])}}">{{$value->name_artist}}</a>
                                                 </h3>
                                                 <h3 class="global-tag">
-                                                    <a href="{{url('file',['id'=>$value->file_id])}}">{{$value->name_gen}}</a>
+                                                    <a href="{{url('genres',['name'=>$value->name_gen])}}">{{$value->name_gen}}</a>
                                                 </h3>
                                             </div>
                                         </div>

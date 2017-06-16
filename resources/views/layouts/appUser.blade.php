@@ -523,7 +523,7 @@ use App\Category;
 
                     ?>
                     @foreach($data as $value)
-                    <li><a href="{{url('cate',['id'=>$value['id']])}}">{!! $value['name'] !!}</a></li>
+                    <li><a href="{{url('cate',['name'=>$value['name']])}}">{!! $value['name'] !!}</a></li>
 
                         @endforeach
                 </ul>
@@ -633,7 +633,7 @@ use App\Category;
 
 
                                 @foreach($data as $value)
-                                    <li><a href="cate/{!! $value['id'] !!}">{!! $value['name'] !!}</a></li>
+                                    <li><a href="{{url('cate',['name'=>$value['name']])}}">{!! $value['name'] !!}</a></li>
 
                                 @endforeach
                             </ul>
@@ -655,6 +655,7 @@ use App\Category;
         </div>
     </div>
 </footer>
+
 <div id="search_block" class="search-block">
     <div class="container">
         <div class="search">
@@ -1058,7 +1059,8 @@ use App\Category;
 </script>
 
 <!-- Google Tag Manager -->
-<noscript>&lt;iframe src="//www.googletagmanager.com/ns.html?id=GTM-WK2Z3D"
+<noscript>
+    &lt;iframe src="//www.googletagmanager.com/ns.html?id=GTM-WK2Z3D"
     height="0" width="0" style="display:none;visibility:hidden"&gt;&lt;/iframe&gt;
 </noscript>
 

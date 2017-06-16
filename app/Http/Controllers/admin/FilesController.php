@@ -7,6 +7,7 @@ use App\Category;
 use App\Genre;
 use App\Http\Requests\FileRequest;
 use App\User;
+use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\File;
 use App\Http\Controllers\Controller;
@@ -42,7 +43,7 @@ class FilesController extends Controller
         $file = File::find($request->id)->toArray();
         $pathOld = $file['path'];
         $fileupdate = File::find($request->id);
-        $fileupdate->name = $request->name;
+        $fileupdate->name = $this->stripUnicode($request->name);
         $path = $request->file('file');
         var_dump($path);
 
@@ -122,6 +123,7 @@ class FilesController extends Controller
 
         $file = new File();
         $file->name = $request->name;
+        $file->slug_name = $this->stripUnicode($request->name);
         $path = $request->file('file');
         $d = date('D');
         $m=date('m');
@@ -183,15 +185,17 @@ class FilesController extends Controller
             'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
             'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
             'y' => 'ý|ỳ|ỷ|ỹ|ỵ',
-            ' ' => '_',
+            '-' => ' ',
         );
         foreach ($unicode as $nonUnicode => $uni) $str = preg_replace("/($uni)/i", $nonUnicode, $str);
         return $str;
     }
+
     function getListDisable(){
         $data = DB::table('files')->where('status',0)->get()->toArray();
         return view('admin.file.listDisable',compact(['data']));
     }
+
     function changeStatus($id,$status){
         $file = File::find($id);
         $file->status=$status;

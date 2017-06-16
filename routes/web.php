@@ -81,8 +81,8 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
         Route::get('listDisable','admin\FilesController@getListDisable');
     });
 });
-Route::get('cate/{id}','PagesController@getmenu');
-Route::get('file/{id}','PagesController@runFile');
+Route::get('cate/{name}','PagesController@getmenu');
+Route::get('file/{name}','PagesController@runFile');
 Route::get('search/{key}','PagesController@search');
 Route::post('Userlogin',['as'=>'UserLogin','uses'=>'PagesController@login']);
 Route::post('UserRegistration',['as'=>'user/registration','uses'=>'PagesController@register']);
@@ -97,8 +97,8 @@ Route::get('register/{user}/{token}','PagesController@checkRegistration');
 Route::post('resetpassword',['as'=>'resetPassword','uses'=>'PagesController@resetPassword']);
 Route::get('resetpassword/{email}/{token}','PagesController@resetPassword_2');
 Route::get('file/favorite/{id}','PagesController@favorite');
-Route::get('genres/{id}','PagesController@listGenres');
-Route::get('artists/{id}','PagesController@listArtists');
+Route::get('genres/{name}','PagesController@listGenres');
+Route::get('artists/{name}','PagesController@listArtists');
 
 
 Route::any('{all?}',function(){

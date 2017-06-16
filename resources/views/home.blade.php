@@ -61,11 +61,8 @@
                 <span class="sr-only">Next</span>
             </a>
         </div>
-<br>
         <br>
-
-
-
+        <br>
         <div class="main-content">
             <div class="row">
                 <div class="col-md-9">
@@ -73,11 +70,8 @@
 
                         <div class="home-section">
                             <div class="header">
-                                <h3 class="title"><a href="/cate/2">MiXsets</a></h3>
-                                <ul class="nav navbar-nav">
-                                    <li class="active"><a href="" data-toggle="tab">Featured</a></li>
-                                    <li><a href="" data-toggle="tab">Newest</a></li>
-                                </ul>
+                                <h3 class="title"><a href="/cate/MIXSET">MiXsets</a></h3>
+                                
                             </div>
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="misset_fetured">
@@ -88,7 +82,7 @@
                                                     <div class="playlist">
                                                         <div class="thumb">
                                                             <div class="global-figure">
-                                                                <a href="{{url('file',['id'=>$value->id])}}"
+                                                                <a href="{{url('file',['name'=>$value->slug_name])}}"
                                                                    title="{{$value->name}}" class="global-image">
                                                                     <span style="background-image: url({{asset($value->artist->image)}})"></span>
                                                                 </a>
@@ -96,11 +90,11 @@
                                                         </div>
                                                         <div class="caption">
                                                             <h2 class="global-name">
-                                                                <a href="{{url('file',['id'=>$value->id])}}"
+                                                                <a href="{{url('file',['name'=>$value->slug_name])}}"
                                                                    title="{{$value->name}}">{{$value->name}}</a>
                                                             </h2>
                                                             <h3 class="global-author">
-                                                                <a href="{{url('artists',['id'=>$value->artist_id])}}"
+                                                                <a href="{{url('artists',['name'=>$value->artist->slug_name])}}"
                                                                    title="{{$value->artist->name}}">{{$value->artist->name}} </a>
                                                             </h3>
                                                         </div>
@@ -114,18 +108,15 @@
                                 </div>
 
                                 <div class="more">
-                                    <a href="/cate/2" title="">More</a>
+                                    <a href="/cate/MIXSET" title="">More</a>
                                 </div>
                             </div>
                         </div>
                         <!-- end .home-section -->
                         <div class="home-section">
                             <div class="header">
-                                <h3 class="title"><a href="/cate/3">tracks</a></h3>
-                                <ul class="nav navbar-nav">
-                                    <li class="active"><a href="" data-toggle="tab">Featured</a></li>
-                                    <li><a href="" data-toggle="tab">Newest</a></li>
-                                </ul>
+                                <h3 class="title"><a href="/cate/TRACKS">tracks</a></h3>
+                              
                             </div>
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="track_fetured">
@@ -137,7 +128,7 @@
                                                     <div class="thumb">
                                                         <div class="global-figure">
                                                             <div class="global-image">
-                                                                <a href="{{url('file',['id'=>$value->id])}}"><span
+                                                                <a href="{{url('file',['name'=>$value->slug_name])}}"><span
                                                                             style="background-image: url({{asset($value->artist->image)}}); width: 80px; height: 80px;"></span></a>
                                                             </div>
                                                         </div>
@@ -145,25 +136,25 @@
                                                 </div>
                                                 <div class="media-body">
                                                     <h2 class="global-name"><a
-                                                                href="{{url('file',['id'=>$value->id])}}"
+                                                                href="{{url('file',['name'=>$value->slug_name])}}"
                                                                 title="{{$value->name}}">{{$value->name}}</a>
                                                     </h2>
                                                     <h3 class="global-author">
-                                                        <a href="{{url('artists',['id'=>$value->artist_id])}}"
+                                                        <a href="{{url('artists',['name'=>$value->artist->slug_name])}}"
                                                            title="{{$value->artist->name}}">{{$value->artist->name}}</a>
                                                     </h3>
                                                     <h3 class="global-tag">
-                                                        <a href="{{url('genres',['id'=>$value->genre_id])}}" title="{{$value->genre->name}}">{{$value->genre->name}}</a>
+                                                        <a href="{{url('genres',['name'=>$value->genre->name])}}" title="{{$value->genre->name}}">{{$value->genre->name}}</a>
                                                     </h3>
                                                 </div>
                                                 <div class="media-right">
                                                     <div class="action">
                                                         <ul class="user-action list-inline">
-                                                            <!--<li><a href="javascript:void(0)" data-object-id="2004764" data-image-url="http://st.cdn.mix166.com/images/edm_songs/2017/05/08/1494231223-5fad6fb8b88c12b6246f07e60e19019e1491193016.jpg?w=100&mode=scale" data-price="0" title="Buy" class="btn-buy modal_music_buy">buy</a></li>-->
+                                                            
                                                             <li><a href="javascript:void(0)" data-object-id="2004764"
                                                                    data-object-type="edm_song" title="Share"
                                                                    class="btn-share"
-                                                                   data-link-share="http://mix166.com/tracks/anh-se-ve-som-thoi-dj-gin-remix-2004764.html"
+                                                                   data-link-share="{{url('file',['name'=>$value->slug_name])}}"
                                                                    onclick="shareLink(this);">share</a></li>
                                                         </ul>
                                                         <ul class="details list-inline">
@@ -184,7 +175,7 @@
 
                                     </div>
                                     <div class="more more-song">
-                                        <a href="/cate/3" title="Load More">More</a>
+                                        <a href="/cate/TRACKS" title="Load More">More</a>
                                     </div>
                                 </div>
 
@@ -192,11 +183,8 @@
                         </div>
                         <div class="home-section">
                             <div class="header">
-                                <h3 class="title"><a href="/cate/1">VIDEOS</a></h3>
-                                <ul class="nav navbar-nav">
-                                    <li class="active"><a href="" data-toggle="tab">Featured</a></li>
-                                    <li><a href="" data-toggle="tab">Newest</a></li>
-                                </ul>
+                                <h3 class="title"><a href="/cate/VIDEO">VIDEOS</a></h3>
+                              
                             </div>
                             <div class="tab-content">
                                 <div role="tabpanel" class="tab-pane active" id="video_fetured">
@@ -208,13 +196,13 @@
                                                     <div class="thumb">
                                                         <div class="global-figure">
                                                             <div class="global-image">
-                                                                <a href="{{url('file',['id'=>$value->id])}}"
+                                                                <a href="{{url('file',['name'=>$value->slug_name])}}"
                                                                    title="{{$value->name}}">
                                                                     <span style="background-image: url({{asset($value->path_image_video)}})"></span>
                                                                 </a>
                                                             </div>
                                                         </div>
-                                                        <a href="{{url('file',['id'=>$value->id])}}" title=""
+                                                        <a href="{{url('file',['name'=>$value->slug_name])}}" title=""
                                                            class="global-action">
                                                   <span class="video-play">
                                                     <i class="flaticon-arrows"></i>
@@ -225,12 +213,12 @@
                                                 </div>
                                                 <div class="caption">
                                                     <h1 class="global-name">
-                                                        <a href="{{url('file',['id'=>$value->id])}}" title="{{$value->name}}">{{$value->name}}</a>
+                                                        <a href="{{url('file',['name'=>$value->slug_name])}}" title="{{$value->name}}">{{$value->name}}</a>
                                                     </h1>
                                                     <h2 class="global-author">
                                                 <span>
 
-                                                  <a href="{{url('artists',['id'=>$value->artist->id])}}" title="{{$value->genre->name}}">{{$value->genre->name}}</a>
+                                                  <a href="{{url('artists',['name'=>$value->artist->slug_name])}}" title="{{$value->genre->name}}">{{$value->genre->name}}</a>
                                                 </span>
                                                     </h2>
                                                     <span class="total-views">{{$value->count_view}} view</span>
@@ -242,7 +230,7 @@
                                         </div>
                                     </div>
                                     <div class="more more-song" style="margin-top: -20px;">
-                                        <a href="/cate/1" title="Load More">More</a>
+                                        <a href="/cate/VIDEO" title="Load More">More</a>
                                     </div>
                                 </div>
 
@@ -282,7 +270,7 @@
                                 </a>
                                 <div class="type">
                                     <span>top mixsets</span>
-                                    <a href="/cate/2" title="View all">View all</a>
+                                    <a href="/cate/MIXSET" title="View all">View all</a>
                                 </div>
                             </div>
 
@@ -301,7 +289,7 @@
                                             <div class="thumb">
                                                 <div class="global-figure">
                                                     <div class="global-image">
-                                                        <a href="{{url('file',['id'=>$value->id])}}"
+                                                        <a href="{{url('file',['name'=>$value->slug_name])}}"
                                                            title="{{$value->name}}"><span
                                                                     style="background-image: url({{asset($value->artist->image)}}); width: 65px; height: 65px;"></span></a>
                                                     </div>
@@ -310,13 +298,13 @@
                                         </div>
                                         <div class="media-right">
                                             <h2 class="global-name"><a
-                                                        href="{{url('file',['id'=>$value->id])}}"
+                                                        href="{{url('file',['name'=>$value->slug_name])}}"
                                                         title="{{$value->name}}">{{$value->name}}</a></h2>
                                             <h3 class="global-author">
-                                                <a href="{{url('artists',['id'=>$value->artist_id])}}">{{$value->artist->name}}</a>
+                                                <a href="{{url('artists',['name'=>$value->artist->slug_name])}}">{{$value->artist->name}}</a>
                                             </h3>
                                             <h3 class="global-tag">
-                                                <a href="{{url('genres',['id'=>$value->genre_id])}}">{{$value->genre->name}}</a>
+                                                <a href="{{url('genres',['name'=>$value->genre->name])}}">{{$value->genre->name}}</a>
                                             </h3>
                                         </div>
                                     </div>
@@ -347,13 +335,13 @@
                                     <div class="media">
                                         <div class="media-left"><span class="ratings"><?=$i++?></span></div>
                                         <div class="media-body">
-                                            <h2 class="global-name"><a href="{{url('file',['id'=>$value->id])}}"
+                                            <h2 class="global-name"><a href="{{url('file',['name'=>$value->slug_name])}}"
                                                                        title="{{$value->name}}">{{$value->name}}</a></h2>
                                             <h3 class="global-author">
-                                                <a href="{{url('artists',['id'=>$value->artist_id])}}">{{$value->artist->name}}</a>
+                                                <a href="{{url('artists',['name'=>$value->artist->slug_name])}}">{{$value->artist->name}}</a>
                                             </h3>
                                             <h3 class="global-tag">
-                                                <a href="">{{$value->genre->name}}</a>
+                                                <a href="{{url('genres',['name'=>$value->genre->name])}}">{{$value->genre->name}}</a>
 
                                             </h3>
                                         </div>

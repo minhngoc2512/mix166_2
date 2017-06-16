@@ -180,7 +180,7 @@
                                               <div class="thumb">
                                                 <div class="global-figure">
                                                   <div class="global-image">
-                                                    <a href="{{url('file',['id'=>$value->id])}}"
+                                                    <a href="{{url('file',['name'=>$value->slug_name])}}"
                                                        title="{{$value->name}}">
 
                                                         <span
@@ -192,7 +192,7 @@
                                               </div>
                                             </div>
                                             <div class="media-body">
-                                              <h2 class="song-name"><a href="{{url('file',['id'=>$value->id])}}"
+                                              <h2 class="song-name"><a href="{{url('file',['name'=>$value->slug_name])}}"
                                                                        title="{{$value->artist->name}}">{{$value->name}}</a></h2>
                                             </div>
                                           </div>
@@ -208,7 +208,7 @@
                                         <span class="tablesaw-cell-content">
                                         <b class="tablesaw-cell-label">Genre</b>
                                         <span class="tablesaw-cell-content"><p class="genre">
-                                                <a href="?genre=2000009"
+                                                <a href="{{url('genres',['name'=>$value->genre->name])}}"
                                                    title="Tropical House"> {{$value->genre->name}} </a>
                     </p>
   </span>
@@ -222,7 +222,7 @@
                                         <!--<a href="javascript:void(0)" title="" class="btn-buy">buy</a>-->
                                         <a href="javascript:void(0)" data-object-id="2000388" data-object-type="edm_mix"
                                            title="share" class="btn-share"
-                                           data-link-share="http://mix166.com/mixsets/james-arthur-say-you-won-t-let-go-wind-remix-2000388.html"
+                                           data-link-share="{{url('file',['name'=>$value->slug_name])}}"
                                            onclick="shareLink(this);">share</a>
                                     </td>
                                 </tr>

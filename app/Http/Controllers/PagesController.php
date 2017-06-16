@@ -38,74 +38,85 @@ class PagesController extends Controller
 
         return view('home',compact(['dataTrack','dataMix','dataVideo','dataMixTop','dataTrackTop']));
     }
-    public function getMenu($id){
 
-        if($id==1){
+
+    public function getMenu($name){
+
+        if($name=='VIDEO'){
             $videoTop = File::where('category_id',1)->take(2)->get();
 
           
            $data = File::where('category_id',1)->paginate(10);
             return view('user.video.list',compact(['data','videoTop']));
 
-        }else if($id==3){
-            $data = File::where('category_id',3)->paginate(10);
-            return view('user.track.list',compact(['data']));
-        }elseif($id==2){
+        }else if($name=='MIXSET'){
             $data = File::where('category_id',2)->paginate(10);
-
             return view('user.mixset.list',compact(['data']));
+        }elseif($name=='TRACKS'){
+            $data = File::where('category_id',3)->paginate(10);
+
+            return view('user.track.list',compact(['data']));
 
         }
 
         //return view('user.mixset.list',compact(['data']));
     }
-    public function runFile($id){
-        $data = DB::select("select g.name as gen_name , f.count_view as view_count, f.id as file_id, f.category_id as cate_id, f.count_view as count_view, f.path as file_path, f.name as file_name, a.name as artist_name, a.image as artist_image from files f 
+    public function runFile($name){
+        $data = DB::select("select a.slug_name as slug_name_artist ,f.slug_name as slug_name_file, g.name as gen_name , f.count_view as view_count, f.id as file_id, f.category_id as cate_id, f.count_view as count_view, f.path as file_path, f.name as file_name, a.name as artist_name, a.image as artist_image from files f 
         inner join artists a on f.artist_id = a.id 
-        INNER join genres g on f.genre_id = g.id where f.id=$id and f.status=1");
+        INNER join genres g on f.genre_id = g.id where f.slug_name='$name' and f.status=1");
+        if(isset($data[0])){
         $type = explode('.',$data[0]->file_path);
         $typeFile = $type[count($type)-1];
         $view = $data[0]->count_view;
         $view = $view +1;
-        DB::update("update files set count_view= $view where id = $id");
+        DB::update("update files set count_view= $view where slug_name='$name'");
         if($typeFile=='mp3'){
-            $random= DB::select ("select  f.name as file_name, f.id as file_id,a.name as artist_name, a.image as artist_image
+            $random= DB::select ("select f.slug_name as slug_name_file, a.slug_name as slug_name_artist,  f.name as file_name, f.id as file_id,a.name as artist_name, a.image as artist_image
         from files f
         inner join artists a on f.artist_id = a.id
           INNER join genres ON f.genre_id = genres.id
        where f.category_id=".$data[0]->cate_id." ORDER BY rand() limit 5;");
-            $favorite = DB::select("select count(*) as favorite from `user-favorite` where file_id=$id");
+            $favorite = DB::select("select count(*) as favorite from `user-favorite` where file_id=".$data[0]->file_id);
             return view('user.playmedia.playAudio',compact(['data','random','favorite']));
 
         }
-        $random= DB::select ("select  f.path_image_video as video_image, f.name as file_name, f.id as file_id,a.name as artist_name, a.image as artist_image
+        $random= DB::select ("select f.slug_name as slug_name_file, a.slug_name as slug_name_artist, f.path_image_video as video_image, f.name as file_name, f.id as file_id,a.name as artist_name, a.image as artist_image
         from files f
         inner join artists a on f.artist_id = a.id
           INNER join genres ON f.genre_id = genres.id
          where f.category_id=".$data[0]->cate_id." ORDER BY rand() limit 5;");
 
-        $favorite = DB::select("select count(*) as favorite from `user-favorite` where file_id=$id");
+        $favorite = DB::select("select count(*) as favorite from `user-favorite` where file_id=".$data[0]->file_id);
 
-        return view('user.playmedia.playVideo',compact(['data','random','favorite']));
+            return view('user.playmedia.playVideo', compact(['data', 'random', 'favorite']));
+        }else{
+            echo "
+            <script>
+            alert('Sorry!Please wait admin check file!');
+            
+            </script>
+            ";
+        }
     }
     public function search($key){
         $key = $_REQUEST['q'];
         $track = DB::select("
-        select f.name as file_name, f.id as file_id, g.name as gen_name,a.name as artist_name, a.image as artist_image
+        select f.slug_name as slug_name_file,a.slug_name as slug_name_artist,  f.name as file_name, f.id as file_id, g.name as gen_name,a.name as artist_name, a.image as artist_image
         from files f
           inner join genres g on f.genre_id = g.id
           inner join artists a on f.artist_id = a.id
         where f.name like '%$key%' and f.category_id=3  and f.status=1 limit 5
         ");
         $video = DB::select("
-        select f.name as file_name, f.id as file_id, g.name as gen_name,a.name as artist_name, a.image as artist_image,f.path_image_video as image_video
+        select f.slug_name as slug_name_file,a.slug_name as slug_name_artist,  f.name as file_name, f.id as file_id, g.name as gen_name,a.name as artist_name, a.image as artist_image,f.path_image_video as image_video
         from files f
           inner join genres g on f.genre_id = g.id
           inner join artists a on f.artist_id = a.id
         where f.name like '%$key%' and f.category_id=1  and f.status=1 limit 5;
         ");
         $mixset = DB::select("
-        select f.name as file_name, f.id as file_id, g.name as gen_name,a.name as artist_name, a.image as artist_image
+        select f.slug_name as slug_name_file,a.slug_name as slug_name_artist,  f.slug_name as slug_name_file,a.slug_name as slug_name_artist,  f.name as file_name, f.id as file_id, g.name as gen_name,a.name as artist_name, a.image as artist_image
 from files f
   inner join genres g on f.genre_id = g.id
   inner join artists a on f.artist_id = a.id
@@ -118,18 +129,18 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
                        <div class="col-md-3 col-sm-6">
                         <div class="search-results-block">
                             <h3 class="search-results-block-title"><span>MIXSETS</span>
-                                <a href="'.url('cate/2').'" class="search-more">View all</a>
+                                <a href="'.url('cate/MIXSET').'" class="search-more">View all</a>
                             </h3>
                             <div class="search-results-block-list">';
         foreach($mixset as $value) {
             echo '         <div class="media">
                                     <div class="media-left">
-                                        <a class="img" href="'.url('file',['id'=>$value->file_id]).'"><img src="http://st.mix166.com/html/images/spacer.gif" class="bgi" style="background-image: url('.asset($value->artist_image).');" alt=""></a>
+                                        <a class="img" href="'.url('file',['name'=>$value->slug_name_file]).'"><img src="http://st.mix166.com/html/images/spacer.gif" class="bgi" style="background-image: url('.asset($value->artist_image).');" alt=""></a>
                                     </div>
                                     <div class="media-body">
-                                        <h2 class="global-name"><a href="'.url('file',['id'=>$value->file_id]).'">'.$value->file_name.'</a></h2>
+                                        <h2 class="global-name"><a href="'.url('file',['name'=>$value->slug_name_file]).'">'.$value->file_name.'</a></h2>
                                         <h3 class="global-author">
-                                            <a href="#" title="">'.$value->artist_name.' </a>
+                                            <a href="'.url('artists',['name'=>$value->slug_name_artist]).'" title="">'.$value->artist_name.' </a>
                                         </h3>
                                     </div>
                                 </div>';
@@ -149,12 +160,12 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         foreach ($track as $value){
             echo '                <div class="media">
                                     <div class="media-left">
-                                        <a class="img" href="'.url('file',['id'=>$value->file_id]).'"><img src="http://st.mix166.com/html/images/spacer.gif" class="bgi" style="background-image: url('.asset($value->artist_image).');" alt=""></a>
+                                        <a class="img" href="'.url('file',['name'=>$value->slug_name_file]).'"><img src="http://st.mix166.com/html/images/spacer.gif" class="bgi" style="background-image: url('.asset($value->artist_image).');" alt=""></a>
                                     </div>
                                     <div class="media-body">
-                                        <h2 class="global-name"><a href="'.url('file',['id'=>$value->file_id]).'">'.$value->file_name.'</a></h2>
+                                        <h2 class="global-name"><a href="'.url('file',['name'=>$value->slug_name_file]).'">'.$value->file_name.'</a></h2>
                                         <h3 class="global-author">
-                                            <a href="#" title="Hip-Hop/Rap">'.$value->artist_name.'</a>
+                                            <a href="'.url('artists',['name'=>$value->slug_name_artist]).'" title="Hip-Hop/Rap">'.$value->artist_name.'</a>
                                         </h3>
 
                                  </div>
@@ -169,7 +180,7 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
                     <div class="col-md-3 col-sm-6">
                         <div class="search-results-block video">
                             <h3 class="search-results-block-title"><span>VIDEOS</span>
-                                <a href="/search/video?q=Yeu" class="search-more">View all</a>
+                                <a href="" class="search-more">View all</a>
                             </h3>
                             <div class="search-results-block-list">';
 
@@ -177,12 +188,12 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
             echo '
                                 <div class="media">
                                     <div class="media-left">
-                                        <a class="img" href="'.url('file',['id'=>$value->file_id]).'"><img src="http://st.mix166.com/html/images/spacer.gif" class="bgi" style="background-image: url('.asset($value->image_video).');" alt=""></a>
+                                        <a class="img" href="'.url('file',['name'=>$value->slug_name_file]).'"><img src="http://st.mix166.com/html/images/spacer.gif" class="bgi" style="background-image: url('.asset($value->image_video).');" alt=""></a>
                                     </div>
                                     <div class="media-body">
-                                        <h2 class="global-name"><a href="'.url('file',['id'=>$value->file_id]).'" title="">'.$value->file_name.'</a></h2>
+                                        <h2 class="global-name"><a href="'.url('file',['name'=>$value->slug_name_file]).'" title="">'.$value->file_name.'</a></h2>
                                         <h3 class="global-author">
-                                            <a href="#" title="">'.$value->artist_name.'</a>
+                                            <a href="'.url('artists',['name'=>$value->slug_name_artist]).'" title="'.$value->artist_name.'">'.$value->artist_name.'</a>
                                         </h3>
                                     </div>
                                 </div>';
@@ -210,55 +221,16 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
 
 
 
-            $dataMix = DB::select("select
+            $dataMix = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(10)->get();
 
-         f.id as file_id, a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
-        from files f
-         inner join artists a on f.artist_id = a.id
-        inner JOIN users u on f.user_id = u.id
-        INNER join genres g on f.genre_id = g.id
-        INNER  join categories on f.category_id = categories.id
-         where f.category_id=2 and f.status=1
-        GROUP BY f.id DESC limit 10");
-            $dataVideo = DB::select("
-        select  f.id as file_id,  f.path_image_video as image_video,
-         a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
-        from files f
-         inner join artists a on f.artist_id = a.id
-        inner JOIN users u on f.user_id = u.id
-        INNER join genres g on f.genre_id = g.id
-        INNER  join categories on f.category_id = categories.id
-         where f.category_id=1 and  f.status=1
-        GROUP BY f.id DESC limit 8");
-            $dataTrack = DB::select("select f.id as file_id,
-         a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
-        from files f
-         inner join artists a on f.artist_id = a.id
-        inner JOIN users u on f.user_id = u.id
-        INNER join genres g on f.genre_id = g.id
-        INNER  join categories on f.category_id = categories.id
-         where f.category_id=3 and f.status=1
-        GROUP BY f.id DESC limit 5");
 
-            $dataMixTop = DB::select("select
+            $dataVideo = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(8)->get();
 
-         f.id as file_id, a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
-        from files f
-         inner join artists a on f.artist_id = a.id
-        inner JOIN users u on f.user_id = u.id
-        INNER join genres g on f.genre_id = g.id
-        INNER  join categories on f.category_id = categories.id
-         where f.category_id=2 and f.status=1
-        GROUP BY f.id DESC limit 5");
-            $dataTrackTop = DB::select("select f.id as file_id,
-         a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
-        from files f
-         inner join artists a on f.artist_id = a.id
-        inner JOIN users u on f.user_id = u.id
-        INNER join genres g on f.genre_id = g.id
-        INNER  join categories on f.category_id = categories.id
-         where f.category_id=3 and f.status=1
-        GROUP BY f.id DESC limit 10");
+            $dataTrack = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(5)->get();
+
+
+            $dataMixTop = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(5)->get();
+            $dataTrackTop = File::where(['category_id'=>3,'status'=>1])->orderBy('id','desc')->take(10)->get();
             return view('home',compact(['error','dataTrack','dataMix','dataVideo','dataMixTop','dataTrackTop']));
 
         }
@@ -296,14 +268,14 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
             confirm('Created account success!');
             </script>";
 
-            return redirect()->route('home')->with(['ok'=>$ok]);
+            return view('user.notification',compact(['ok']));
             }
         else{
             $error = "<script>
             confirm('Create account error!  Check again email');
             </script>";
             echo $error;
-            return redirect()->route('home',['error'=>$error]);
+            return view('user.notification',compact(['error']));
 
         }
     }
@@ -363,7 +335,8 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
     function getProfile($id){
         $dataMixTop = DB::select("select
 
-         f.id as file_id, a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
+
+         f.slug_name as slug_name_file, a.slug_name as slug_name_artist ,f.id as file_id, a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
         from files f
          inner join artists a on f.artist_id = a.id
         inner JOIN users u on f.user_id = u.id
@@ -372,29 +345,29 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
          where f.category_id=2  and f.status=1
         GROUP BY f.id DESC limit 10");
 
-        $dataMixset = DB::select("select f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $dataMixset = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where uf.user_id=$id and category_id=2");
-        $dataVideo = DB::select("select  f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $dataVideo = DB::select("select    f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where uf.user_id=$id and category_id=1");
-        $dataTrack = DB::select("select f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $dataTrack = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where uf.user_id=$id and category_id=3");
 
 
-        $dataUserMixset = DB::select("select f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $dataUserMixset = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where f.user_id=$id and category_id=2");
-        $dataUserVideo = DB::select("select  f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $dataUserVideo = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
     
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where f.user_id=$id and f.category_id=1");
-        $dataUserTrack = DB::select("select f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $dataUserTrack = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
        
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where f.user_id=$id and category_id=3");
@@ -440,7 +413,7 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
             'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
             'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
             'y' => 'ý|ỳ|ỷ|ỹ|ỵ',
-            ' ' => '_',
+            '-' => ' ',
         );
         foreach ($unicode as $nonUnicode => $uni) $str = preg_replace("/($uni)/i", $nonUnicode, $str);
         return $str;
@@ -451,7 +424,8 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         echo"</pre>";
 
         $file = new File();
-        $file->name = $request->name;
+        $file->name =$request->name;
+        $file->slug_name =  $this->stripUnicode($request->name);
         $path = $request->file('file');
         
         $d = date('D');
@@ -506,12 +480,16 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         $category = Category::all()->toArray();
         return view('user.profile.uploadfile',compact(['artist','genre','category']));
     }
-    function listGenres($id){
-        $data =File::where('genre_id',$id)->paginate(10);
+    function listGenres($name){
+       $tmp = DB::select("select * from genres where name='$name'");
+
+       $data =File::where('genre_id',$tmp[0]->id)->paginate(10);
         return view('user.genre.list',compact(['data']));
     }
-    function listArtists($id){
-        $data =File::where('artist_id',$id)->paginate(10);
+    function listArtists($slug_name){
+        $tmp = Artist::where('slug_name',$slug_name)->get();
+
+        $data =File::where('artist_id',$tmp[0]->id)->paginate(10);
         return view('user.artist.list',compact(['data']));
     }
 }

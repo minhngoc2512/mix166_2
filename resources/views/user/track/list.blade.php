@@ -57,7 +57,7 @@
                                                                 <div class="thumb">
                                                                     <div class="global-figure">
                                                                         <div class="global-image">
-                                                                            <a href="{{url('file',['id'=>$value->id])}}">
+                                                                            <a href="{{url('file',['name'=>$value->slug_name])}}">
                                                                                 <span style="background-image: url({{asset($value->artist->image)}}); width: 45px; height: 45px;">
                                                                                 </span>
                                                                             </a>
@@ -67,7 +67,7 @@
                                                             </div>
                                                             <div class="media-body">
                                                                 <h2 class="song-name">
-                                                                    <a href="{{url('file',['id'=>$value->id])}}" title="{{$value->name}}">
+                                                                    <a href="{{url('file',['name'=>$value->slug_name])}}" title="{{$value->name}}">
                                                                         {{$value->name}}
                                                                     </a>
                                                                 </h2>
@@ -86,7 +86,7 @@
                                                     </b>
                                                     <span class="tablesaw-cell-content">
                                                         <p class="artists">
-                                                            <a href="{{url('artists',['id'=>$value->artist_id])}}" title="Isaac">
+                                                            <a href="{{url('artists',['name'=>$value->artist->slug_name])}}" title="Isaac">
                                                                 {{$value->artist->name}}
                                                             </a>
                                                         </p>
@@ -103,7 +103,7 @@
                                                     </b>
                                                     <span class="tablesaw-cell-content">
                                                         <p class="genre">
-                                                            <a href="{{url('genres',['id'=>$value->genre_id])}}" title="Progressive House">
+                                                            <a href="{{url('genres',['name'=>$value->genre->name])}}" title="Progressive House">
                                                                 {{$value->genre->name}}
                                                             </a>
                                                         </p>
@@ -157,7 +157,7 @@
                                             </td>
                                             <td>
                                                 <!--<a href="javascript:void(0)" title="" class="btn-buy">buy</a>-->
-                                                <a class="btn-share" data-link-share="http://mix166.com/tracks/anh-se-ve-som-thoi-dj-gin-remix-2004764.html" data-object-id="2004764" data-object-type="edm_song" href="javascript:void(0)" onclick="shareLink(this);" title="share">
+                                                <a class="btn-share" data-link-share="{{url('file',['name'=>$value->slug_name])}}" data-object-id="2004764" data-object-type="edm_song" href="javascript:void(0)" onclick="shareLink(this);" title="share">
                                                     share
                                                 </a>
                                             </td>

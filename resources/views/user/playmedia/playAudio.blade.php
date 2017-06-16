@@ -28,9 +28,9 @@
                                     </h2>
                                     <div class="tags">
                                         <ul class="list-inline">
-                                            <li><a class="btn btn-tag btn-xs" href="/mixsets/?genre=2000000"
+                                            <li><a class="btn btn-tag btn-xs" href=""
                                                    role="button">#Deep House</a></li>
-                                            <li><a class="btn btn-tag btn-xs" href="/mixsets/?genre=2000009"
+                                            <li><a class="btn btn-tag btn-xs" href=""
                                                    role="button">#Tropical House</a></li>
                                         </ul>
                                     </div>
