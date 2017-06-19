@@ -16,10 +16,10 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="http://st.mix166.com/html/css/tablesaw.css" media="screen">
-    <link rel="stylesheet" type="text/css" href="http://st.mix166.com/html/css/bootstrap-datetimepicker.css"
+    <link rel="stylesheet" type="text/css" href="{{asset('css/tablesaw.css')}}" media="screen">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-datetimepicker.css')}}"
           media="screen">
-    <link rel="stylesheet" type="text/css" href="http://st.mix166.com/html/css/style.css?v=1494261145" media="screen">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}" media="screen">
 
 
     <div class="container">
