@@ -17,8 +17,8 @@ class MailRegister extends Mailable
     {
 
             $nFrom = "Mix166";    //mail duoc gui tu dau, thuong de ten cong ty ban
-            $mFrom = 'donkihote2595@gmail.com';  //dia chi email cua ban
-            $mPass = 'maitrang0606';       //mat khau email cua ban
+            $mFrom = 'minhngoc2512@yahoo.com';  //dia chi email cua ban
+            $mPass = 'ngoctrang0606';       //mat khau email cua ban
             $nTo = $user->name; //Ten nguoi nhan
             $mTo = $user->email;   //dia chi nhan mail
             $mail             = new PHPMailer();
@@ -42,7 +42,7 @@ class MailRegister extends Mailable
             $mail->SMTPDebug  = 0;   // enables SMTP debug information (for testing)
             $mail->SMTPAuth   = true;    // enable SMTP authentication
             $mail->SMTPSecure = "ssl";   // sets the prefix to the servier
-            $mail->Host       = "smtp.gmail.com";    // sever gui mail.
+            $mail->Host       = "smtp.mail.yahoo.com";    // sever gui mail.
             $mail->Port       = 465;         // cong gui mail de nguyen
             // xong phan cau hinh bat dau phan gui mail
             $mail->Username   = $mFrom;  // khai bao dia chi email
