@@ -19,7 +19,19 @@
                 </div>
                 <div class="form-group">
                     <label>Insert file</label>
-                    <input class="form-control" type="file" name="file">
+                    <select onchange="insertFile(this.value)" class="form-control">
+                        <option value="url"> Type Url</option>
+                        <option value="file" >Type file</option>
+                    </select>
+
+                    <div id="file" >
+                        <label>Url:</label>
+
+                        <input class="form-control" type="text" placeholder="Enter url"  name="url" />
+
+                    </div>
+
+
                 </div>
                 <div class="form-group">
                     <label>Choose catefory</label>
@@ -83,5 +95,16 @@
         }
 
     }
+    function insertFile(i){
+        if(i!='url'){
+
+            document.getElementById('file').innerHTML = ' <label>File:</label><input class="form-control" type="file" name="file"/>';
+        }else{
+            document.getElementById('file').innerHTML ='  <label>Url:</label><input class="form-control" type="text" placeholder="Enter url"  name="url" />';
+
+        }
+
+    }
     </script>
+
 @endsection

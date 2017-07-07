@@ -46,15 +46,23 @@
 
 
 
-                                @else
+                                @elseif($type=='mp3')
                                     <audio controls>
                                         <source src="{!! asset($value['path']) !!}" type="audio/ogg">
                                         <source src="{!! asset($value['path']) !!}" type="audio/mpeg">
                                         Your browser does not support the audio element.
                                     </audio>
+                                @else
+                                    <video width="320" height="240" controls>
+                                        <source src="{!! asset($value['path']) !!}" type="video/mp4">
+                                        <source src="{!! asset($value['path']) !!}" type="video/ogg">
+                                        Your browser does not support the video tag.
+                                    </video>
 
 
-                            @endif
+
+
+                                @endif
                         </td>
                         @if($value['path_image_video']!=null)
                         <td><img src="{{asset($value['path_image_video'])}}" width="100" class="img-thumbnail"></td>

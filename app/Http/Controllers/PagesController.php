@@ -343,7 +343,7 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         INNER join genres g on f.genre_id = g.id
         INNER  join categories on f.category_id = categories.id
          where f.category_id=2  and f.status=1
-        GROUP BY f.id DESC limit 10");
+       ORDER BY f.id DESC limit 10");
 
         $dataMixset = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
@@ -419,23 +419,26 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         return $str;
     }
     function uploadFile(FileRequest $request){
-        echo "<pre>";
-        print_r($request->file('file'));
-        echo"</pre>";
-
         $file = new File();
         $file->name =$request->name;
         $file->slug_name =  $this->stripUnicode($request->name);
-        $path = $request->file('file');
-        
-        $d = date('D');
-        $m=date('m');
-        $y = date('Y');
-        $s = date('s');
-        $h = date('h');
-        $mm =date('i');
-        $filename ='fileupload/file/'.  "$d-$m-$y-$s-$mm-$h-".$this->stripUnicode($path->getClientOriginalName());
-        move_uploaded_file($path->getRealPath(),$filename);
+        $filename='';
+
+        if($request->url==null) {
+            $path = $request->file('file');
+            $d = date('D');
+            $m = date('m');
+            $y = date('Y');
+            $s = date('s');
+            $h = date('h');
+            $mm = date('i');
+            $filename = 'fileupload/file/' . "$d-$m-$y-$s-$mm-$h-" . $this->stripUnicode($path->getClientOriginalName());
+            move_uploaded_file($path->getRealPath(), $filename);
+        }else{
+            $filename= $request->url;
+        }
+
+
         $file->path = $filename;
         $file->genre_id = $request->gen;
         $file->artist_id = $request->art;

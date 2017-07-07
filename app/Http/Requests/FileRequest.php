@@ -27,7 +27,7 @@ class FileRequest extends FormRequest
     {
         return [
             'name'=>'required|unique:files,name',
-            'file'=>'required',
+            //'file'=>'required',
             //
         ];
     }
@@ -36,7 +36,7 @@ class FileRequest extends FormRequest
         return [
             'name.required'=>"Please enter file's name",
             'name.unique'=>"File's name existed",
-            'file.required'=>'Please insert file',
+            //'file.required'=>'Please insert file',
            // 'file.mimetypes'=>"Type's file is not support"
         ];
     }

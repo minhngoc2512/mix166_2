@@ -124,15 +124,23 @@ class FilesController extends Controller
         $file = new File();
         $file->name = $request->name;
         $file->slug_name = $this->stripUnicode($request->name);
-        $path = $request->file('file');
-        $d = date('D');
-        $m=date('m');
-        $y = date('Y');
-        $s = date('s');
-        $h = date('h');
-        $mm =date('i');
-        $filename ='fileupload/file/'.  "$d-$m-$y-$s-$mm-$h-".$this->stripUnicode($path->getClientOriginalName());
-        move_uploaded_file($path->getRealPath(),$filename);
+        $filename ='';
+
+        if($request->url==null) {
+            $path = $request->file('file');
+            $d = date('D');
+            $m = date('m');
+            $y = date('Y');
+            $s = date('s');
+            $h = date('h');
+            $mm = date('i');
+            $filename = 'fileupload/file/' . "$d-$m-$y-$s-$mm-$h-" . $this->stripUnicode($path->getClientOriginalName());
+            move_uploaded_file($path->getRealPath(), $filename);
+        }else{
+            $filename= $request->url;
+        }
+
+
         $file->path = $filename;
         $file->genre_id = $request->gen;
         $file->artist_id = $request->art;
