@@ -66,11 +66,8 @@ use App\Category;
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <!--<li class="active"><a href="/">FEATURED</a></li>-->
-                    <?php
-                    $data = Category::all()->toArray();
-
-                    ?>
-                    @foreach($data as $value)
+                   
+                    @foreach($category as $value)
                     <li><a href="{{url('cate',['name'=>$value['name']])}}">{!! $value['name'] !!}</a></li>
 
                         @endforeach
@@ -141,9 +138,6 @@ use App\Category;
 
 </header>
   @yield('content')
-
-
-
 <footer id="footer">
     <div class="container">
         <div class="row">
@@ -180,7 +174,7 @@ use App\Category;
                             <ul class="list-unstyled">
 
 
-                                @foreach($data as $value)
+                                @foreach($category as $value)
                                     <li><a href="{{url('cate',['name'=>$value['name']])}}">{!! $value['name'] !!}</a></li>
 
                                 @endforeach

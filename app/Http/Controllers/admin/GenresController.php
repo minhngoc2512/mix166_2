@@ -6,6 +6,7 @@ use App\Category;
 use App\Genre;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\File;
 
 class GenresController extends Controller
 {
@@ -32,12 +33,16 @@ class GenresController extends Controller
         return redirect('admin/genre/list');
     }
     public function delete($id){
+        File::where('genre_id',$id)->delete();
+
         Genre::find($id)->delete();
+
         return redirect('admin/genre/list');
     }
     public function edit($id){
-        $data = Genre::find($id)->toArray();
-        return view('admin.genre.edit',compact(['data']));
+        $this->view['data'] = Genre::find($id);
+
+        return view('admin.genre.edit',$this->view);
     }
 
     //

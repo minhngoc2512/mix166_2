@@ -2,16 +2,6 @@
 
 @section('content')
 
-
-
-    <?php
-    if(isset($error))
-        {
-            echo $error;
-        }else if(isset($ok)){
-        echo $ok;
-    }
-            ?>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -20,7 +10,17 @@
     <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-datetimepicker.css')}}"
           media="screen">
     <link rel="stylesheet" type="text/css" href="{{asset('css/style.css')}}" media="screen">
+    <?php
+    if(isset($error))
+    {
+        echo $error;
+    }else if(isset($ok)){
+        echo $ok;
+    }elseif(isset($alert)){
+        echo $alert;
+    }
 
+    ?>
 
     <div class="container">
         <div id="myCarousel" class="carousel slide" data-ride="carousel">
@@ -35,17 +35,17 @@
             <div class="carousel-inner">
 
                 <div class="item active">
-                    <img src="{{asset('image/slider1.jpg')}}" alt="Los Angeles" style="width:100%;">
+                    <img src="{{asset('image/slider1.jpg')}}" alt="Los Angeles" style="width:100%;height: 370px">
 
                 </div>
 
                 <div class="item">
-                    <img src="{{asset('image/slider2.jpg')}}" alt="Chicago" style="width:100%;">
+                    <img src="{{asset('image/slider2.jpg')}}" alt="Chicago" style="width:100%;height: 370px">
 
                 </div>
 
                 <div class="item">
-                    <img src="{{asset('image/slider3.jpg')}}" alt="New York" style="width:100%;">
+                    <img src="{{asset('image/slider3.jpg')}}" alt="New York" style="width:100%;height: 370px">
 
                 </div>
 

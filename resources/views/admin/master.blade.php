@@ -28,7 +28,6 @@
     <link href="{{asset('css/font-awesome.min.css')}}" rel="stylesheet" type="text/css">
 
 
-
 </head>
 <body>
 
@@ -152,10 +151,10 @@
         </div>
     </nav>
 </div>
-    @yield('content')
+@yield('content')
 
 
-<script src="{{asset('js/myjs.js')}}" ></script>
+<script src="{{asset('js/myjs.js')}}"></script>
 
 <!-- jQuery -->
 <script src="{{asset('js/jquery.min.js')}}"></script>

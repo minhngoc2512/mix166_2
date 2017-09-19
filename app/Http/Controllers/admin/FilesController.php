@@ -7,6 +7,7 @@ use App\Category;
 use App\Genre;
 use App\Http\Requests\FileRequest;
 use App\User;
+use App\UserFavorite;
 use function GuzzleHttp\Psr7\str;
 use Illuminate\Http\Request;
 use App\File;
@@ -23,32 +24,38 @@ class FilesController extends Controller
         return view('admin.file.add',compact(['artist','genre','category']));
     }
     public function getList(){
-        $data = File::paginate(10);
-        return view('admin.file.list',compact(['data']));
+        $this->view['data'] = File::paginate(10);
+
+        return view('admin.file.list',$this->view);
     }
     public function delete($id){
-        $data = File::find($id)->toArray();
-        unlink($data['path']);
+        $data = File::find($id);
+        if(file_exists($data->path)) {
+            unlink($data->path);
+            }
+        UserFavorite::where('file_id',$id)->delete();
         File::find($id)->delete();
         return redirect('admin/file/list');
     }
     public function edit($id){
-        $artist = Artist::all()->toArray();
-        $genre = Genre::all()->toArray();
-        $category = Category::all()->toArray();
-        $data = File::find($id)->toArray();
-        return view('admin.file.edit',compact(['data','artist','genre','category']));
+        $this->view['data'] = File::find($id);
+        $this->view['category'] = Category::whereNotIn('id',[$this->view['data']->category_id])->get();
+        $this->view['artists'] = Artist::whereNotIn('id',[$this->view['data']->artist_id])->get();
+        $this->view['genres']= Genre::whereNotIn('id',[$this->view['data']->genre_id])->get();
+        return view('admin.file.edit',$this->view);
     }
     public function update(Request $request){
-        $file = File::find($request->id)->toArray();
-        $pathOld = $file['path'];
-        $fileupdate = File::find($request->id);
-        $fileupdate->name = $this->stripUnicode($request->name);
-        $path = $request->file('file');
-        var_dump($path);
+//        dd($request->all());
 
+        $file = File::find($request->id);
+        $pathOld = $file->path;
+        $fileupdate = File::find($request->id);
+
+        $fileupdate->name = $request->name;
+        $fileupdate->slug_name = $this->stripUnicode($request->name);
+        $path = $request->file('file');
         if($path!=null){
-            unlink($pathOld);
+            if(file_exists($pathOld))unlink($pathOld);
             $d = date('D');
             $m=date('m');
             $y = date('Y');
@@ -58,19 +65,14 @@ class FilesController extends Controller
             $filename ='fileupload/file/'.  "$d-$m-$y-$s-$mm-$h-".$this->stripUnicode($path->getClientOriginalName());
             move_uploaded_file($path->getRealPath(),$filename);
             $fileupdate->path = $filename;
-
+        }elseif($request->url!=null){
+            $fileupdate->path = $request->url;
         }
         if($request->image_video!=null){
-            unlink($file['path_image_video']);
-
+            if(file_exists($file->path_image_video))unlink($file->path_image_video);
             $image = $request->file('image_video');
             $path = $image->getRealPath();
             $image2 = getimagesize($path);
-            $tl = $image2[0]/$image2[1];
-
-
-
-
             $this->loadImage($path);
             $this->resizeImage($image2[0]/2,$image2[1]/2);
             $d = date('D');
@@ -79,20 +81,20 @@ class FilesController extends Controller
             $s = date('s');
             $h = date('h');
             $mm =date('i');
-
-
             $filename ='fileupload/image/'.  "$d-$m-$y-$s-$mm-$h-video.jpg";
             $this->saveImage($filename);
             $fileupdate->path_image_video= $filename;
         }
+        $fileupdate->format_file = $request->format_file;
         $fileupdate->category_id= $request->cate;
         $fileupdate->artist_id = $request->art;
         $fileupdate->genre_id = $request->gen;
         $fileupdate->status = $request->status;
         $fileupdate->save();
         return redirect('admin/file/list');
-
     }
+
+
     private function loadImage($path)
     {
         $type = getimagesize($path);
@@ -124,8 +126,8 @@ class FilesController extends Controller
         $file = new File();
         $file->name = $request->name;
         $file->slug_name = $this->stripUnicode($request->name);
+        $file->format_file = $request->format_file;
         $filename ='';
-
         if($request->url==null) {
             $path = $request->file('file');
             $d = date('D');
@@ -152,22 +154,14 @@ class FilesController extends Controller
             $image = $request->file('image_video');
             $path = $image->getRealPath();
             $image2 = getimagesize($path);
-            $tl = $image2[0]/$image2[1];
-
-
-
-
             $this->loadImage($path);
             $this->resizeImage($image2[0]/2,$image2[1]/2);
             $d = date('D');
             $m=date('m');
-            
             $y = date('Y');
             $s = date('s');
             $h = date('h');
             $mm =date('i');
-
-
             $filename ='fileupload/image/'.  "$d-$m-$y-$s-$mm-$h-video.jpg";
             $this->saveImage($filename);
             $file->path_image_video= $filename;
@@ -186,22 +180,24 @@ class FilesController extends Controller
     {
         if (!$str) return false;
         $unicode = array(
-            'a' => 'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ',
-            'd' => 'đ',
-            'e' => 'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ',
-            'i' => 'í|ì|ỉ|ĩ|ị',
-            'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ',
-            'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự',
-            'y' => 'ý|ỳ|ỷ|ỹ|ỵ',
+            'a' => 'á|à|ả|ã|ạ|ă|ắ|ặ|ằ|ẳ|ẵ|â|ấ|ầ|ẩ|ẫ|ậ|Á|À|Ả|Ã|Ạ|Ă|Ắ|Ẵ|Ẳ|Ẵ|Ặ|Ằ|Ậ|Â|Ấ|Ầ|Ẫ|Ậ|Ẩ',
+            'd' => 'đ|Đ',
+            'e' => 'é|è|ẻ|ẽ|ẹ|ê|ế|ề|ể|ễ|ệ|É|È|Ẹ|Ẽ|Ê|Ế|Ề|Ệ|Ễ|Ể',
+            'i' => 'í|ì|ỉ|ĩ|ị|Í|Ì|Ĩ|Ị',
+            'o' => 'ó|ò|ỏ|õ|ọ|ô|ố|ồ|ổ|ỗ|ộ|ơ|ớ|ờ|ở|ỡ|ợ|Ó|Ò|Ọ|Õ|Ô|Ố|Ộ|Ồ|Ỗ|Ớ|Ơ|Ợ|Ỡ',
+            'u' => 'ú|ù|ủ|ũ|ụ|ư|ứ|ừ|ử|ữ|ự|Ú|Ù|Ụ|Ũ|Ư|Ự|Ữ|Ứ|Ừ',
+            'y' => 'ý|ỳ|ỷ|ỹ|ỵ|Ý|Ỳ|Ỵ|Ỹ',
             '-' => ' ',
         );
         foreach ($unicode as $nonUnicode => $uni) $str = preg_replace("/($uni)/i", $nonUnicode, $str);
+        $str = strtolower($str);
         return $str;
     }
 
     function getListDisable(){
-        $data = DB::table('files')->where('status',0)->get()->toArray();
-        return view('admin.file.listDisable',compact(['data']));
+        $this->view['data'] = File::where('status',0)->get();
+
+        return view('admin.file.listDisable',$this->view);
     }
 
     function changeStatus($id,$status){

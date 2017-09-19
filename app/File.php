@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class File extends Model
 {
+    use SoftDeletes;
     protected $table='files';
     public $timestamps='true';
     protected $fillable= [
@@ -26,7 +28,7 @@ class File extends Model
         return $this->belongsTo('App\User');
     }
     protected  function Genre(){
-        return $this->belongsTo('App\Genre');
+        return $this->hasOne(\App\Genre::class,'id','genre_id');
     }
 
 

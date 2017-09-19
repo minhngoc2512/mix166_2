@@ -19,86 +19,13 @@ use App\Category;
 use App\Genre;
 class PagesController extends Controller
 {
-    public function getHomePage(){
+ 
 
 
-
-        $dataMix = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(10)->get();
-
-        
-        $dataVideo = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(8)->get();
-       
-        $dataTrack = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(5)->get();
-
-     
-       $dataMixTop = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(5)->get();
-        $dataTrackTop = File::where(['category_id'=>3,'status'=>1])->orderBy('id','desc')->take(10)->get();
-
-       // return view('demo',compact(['dataTrack','dataMix','dataVideo','dataMixTop','dataTrackTop']));
-
-        return view('home',compact(['dataTrack','dataMix','dataVideo','dataMixTop','dataTrackTop']));
+    public function __construct(){
+        parent::__construct();
     }
 
-
-    public function getMenu($name){
-
-        if($name=='VIDEO'){
-            $videoTop = File::where('category_id',1)->take(2)->get();
-
-          
-           $data = File::where('category_id',1)->paginate(10);
-            return view('user.video.list',compact(['data','videoTop']));
-
-        }else if($name=='MIXSET'){
-            $data = File::where('category_id',2)->paginate(10);
-            return view('user.mixset.list',compact(['data']));
-        }elseif($name=='TRACKS'){
-            $data = File::where('category_id',3)->paginate(10);
-
-            return view('user.track.list',compact(['data']));
-
-        }
-
-        //return view('user.mixset.list',compact(['data']));
-    }
-    public function runFile($name){
-        $data = DB::select("select a.slug_name as slug_name_artist ,f.slug_name as slug_name_file, g.name as gen_name , f.count_view as view_count, f.id as file_id, f.category_id as cate_id, f.count_view as count_view, f.path as file_path, f.name as file_name, a.name as artist_name, a.image as artist_image from files f 
-        inner join artists a on f.artist_id = a.id 
-        INNER join genres g on f.genre_id = g.id where f.slug_name='$name' and f.status=1");
-        if(isset($data[0])){
-        $type = explode('.',$data[0]->file_path);
-        $typeFile = $type[count($type)-1];
-        $view = $data[0]->count_view;
-        $view = $view +1;
-        DB::update("update files set count_view= $view where slug_name='$name'");
-        if($typeFile=='mp3'){
-            $random= DB::select ("select f.slug_name as slug_name_file, a.slug_name as slug_name_artist,  f.name as file_name, f.id as file_id,a.name as artist_name, a.image as artist_image
-        from files f
-        inner join artists a on f.artist_id = a.id
-          INNER join genres ON f.genre_id = genres.id
-       where f.category_id=".$data[0]->cate_id." ORDER BY rand() limit 5;");
-            $favorite = DB::select("select count(*) as favorite from `user-favorite` where file_id=".$data[0]->file_id);
-            return view('user.playmedia.playAudio',compact(['data','random','favorite']));
-
-        }
-        $random= DB::select ("select f.slug_name as slug_name_file, a.slug_name as slug_name_artist, f.path_image_video as video_image, f.name as file_name, f.id as file_id,a.name as artist_name, a.image as artist_image
-        from files f
-        inner join artists a on f.artist_id = a.id
-          INNER join genres ON f.genre_id = genres.id
-         where f.category_id=".$data[0]->cate_id." ORDER BY rand() limit 5;");
-
-        $favorite = DB::select("select count(*) as favorite from `user-favorite` where file_id=".$data[0]->file_id);
-
-            return view('user.playmedia.playVideo', compact(['data', 'random', 'favorite']));
-        }else{
-            echo "
-            <script>
-            alert('Sorry!Please wait admin check file!');
-            
-            </script>
-            ";
-        }
-    }
     public function search($key){
         $key = $_REQUEST['q'];
         $track = DB::select("
@@ -215,23 +142,23 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         if(Auth::attempt(['email'=>$email,'password'=>$pass,'level'=>2,'status'=>1])){
             return redirect()->route('home');
         }else{
-            $error = "<script>
+            $this->view['error'] = "<script>
             alert('Email or password not correct!!!');
             </script>";
 
 
 
-            $dataMix = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(10)->get();
+            $this->view['dataMix']= File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(10)->get();
 
 
-            $dataVideo = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(8)->get();
+            $this->view['dataVideo'] = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(8)->get();
 
-            $dataTrack = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(5)->get();
+            $this->view['dataTrack'] = File::where(['category_id'=>1,'status'=>1])->orderBy('id','desc')->take(5)->get();
 
 
-            $dataMixTop = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(5)->get();
-            $dataTrackTop = File::where(['category_id'=>3,'status'=>1])->orderBy('id','desc')->take(10)->get();
-            return view('home',compact(['error','dataTrack','dataMix','dataVideo','dataMixTop','dataTrackTop']));
+            $this->view['dataMixTop'] = File::where(['category_id'=>2,'status'=>1])->orderBy('id','desc')->take(5)->get();
+            $this->view['dataTrackTop'] = File::where(['category_id'=>3,'status'=>1])->orderBy('id','desc')->take(10)->get();
+            return view('home',$this->view);
 
         }
     }
@@ -246,7 +173,8 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
         $user->remember_token = $request->_token;
         $user->save();
         event(new EventRegister($request));
-        return view('register')->with(['email'=>$user->email]);
+        $this->view['email']=$user->email;
+        return view('register',$this->view);
 
     }
     public function demo(){
@@ -264,18 +192,18 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
 
         if($data[0]->count_column>0){
             DB::table('users')->where('name',$user)->update(['status'=>1]);
-            $ok = "<script>
+            $this->view['ok'] = "<script>
             confirm('Created account success!');
             </script>";
 
-            return view('user.notification',compact(['ok']));
+            return view('user.notification',$this->view);
             }
         else{
-            $error = "<script>
+            $this->view['error'] = "<script>
             confirm('Create account error!  Check again email');
             </script>";
             echo $error;
-            return view('user.notification',compact(['error']));
+            return view('user.notification',$this->view);
 
         }
     }
@@ -333,7 +261,7 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
        echo $data2[0]->count_1;
     }
     function getProfile($id){
-        $dataMixTop = DB::select("select
+        $this->view['dataMixTop'] = DB::select("select
 
 
          f.slug_name as slug_name_file, a.slug_name as slug_name_artist ,f.id as file_id, a.name as name_artist, f.name as name_file,g.name as name_gen,f.path as path_file,a.image as image_path
@@ -345,29 +273,29 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
          where f.category_id=2  and f.status=1
        ORDER BY f.id DESC limit 10");
 
-        $dataMixset = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $this->view['dataMixset'] = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where uf.user_id=$id and category_id=2");
-        $dataVideo = DB::select("select    f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $this->view['dataVideo'] = DB::select("select    f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where uf.user_id=$id and category_id=1");
-        $dataTrack = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $this->view['dataTrack'] = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         inner join  `user-favorite` uf on f.id = uf.file_id
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where uf.user_id=$id and category_id=3");
 
 
-        $dataUserMixset = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $this->view['dataUserMixset'] = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
         
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where f.user_id=$id and category_id=2");
-        $dataUserVideo = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $this->view['dataUserVideo'] = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.count_view as count_view , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
     
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where f.user_id=$id and f.category_id=1");
-        $dataUserTrack = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
+        $this->view['dataUserTrack'] = DB::select("select   f.slug_name as slug_name_file, a.slug_name as slug_name_artist , f.name as file_name , f.id as file_id, g.name as gen_name, a.name as artist_name, a.image as path_image, f.path_image_video as image_video from files f
        
         inner join artists a on f.artist_id = a.id
         inner join genres g on f.genre_id = g.id where f.user_id=$id and category_id=3");
@@ -375,7 +303,7 @@ where f.name like '%$key%' and f.category_id=2  and f.status=1 limit 5;
 
 
 
-        return view('user.profile.list',compact(['dataVideo','dataMixTop','dataMixset','dataTrack','dataUserVideo','dataUserMixset','dataUserTrack',]));
+        return view('user.profile.list',$this->view);
 
     }
     private function loadImage($path)

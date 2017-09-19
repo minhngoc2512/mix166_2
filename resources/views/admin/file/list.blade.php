@@ -15,7 +15,7 @@
                 <tr>
                     <th>Id</th>
                     <th>Name</th>
-                    <th>Path</th>
+                    <th>Play Media</th>
                     <th>image_video</th>
                     <th>Category_id</th>
                     <th>Artist_id</th>
@@ -31,38 +31,51 @@
                 <tbody>
                 @foreach($data as $value)
                     <tr>
-                        <td>{{$value['id']}}</td>
-                        <td>{{$value['name']}}</td>
+                        <td>{{$value->id}}</td>
+                        <td>{{$value->name}}</td>
                         <td>
-                            <?php
-                            $type = explode('.',$value['path'])[count(explode('.',$value['path']))-1];
-                            ?>
-                            @if($type=='mp4')
-                                    <video width="320" height="240" controls>
-                                        <source src="{!! asset($value['path']) !!}" type="video/mp4">
-                                        <source src="{!! asset($value['path']) !!}" type="video/ogg">
-                                        Your browser does not support the video tag.
-                                    </video>
+                            <p > <!-- Trigger the modal with a button -->
+                                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#playMedia_{!!$value->id!!}"><i class="fa fa-play" aria-hidden="true"></i></button></p>
+
+                        <!-- Modal -->
+                            <div id="playMedia_{!!$value->id!!}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Play media {{$value->name}}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if($value->format_file=='video')
+                                            <video width="320" height="240" controls>
+                                            <source src="{!! asset($value['path']) !!}" type="video/mp4">
+                                            <source src="{!! asset($value['path']) !!}" type="video/ogg">
+                                            Your browser does not support the video tag.
+                                            </video>
 
 
 
-                                @elseif($type=='mp3')
-                                    <audio controls>
-                                        <source src="{!! asset($value['path']) !!}" type="audio/ogg">
-                                        <source src="{!! asset($value['path']) !!}" type="audio/mpeg">
-                                        Your browser does not support the audio element.
-                                    </audio>
-                                @else
-                                    <video width="320" height="240" controls>
-                                        <source src="{!! asset($value['path']) !!}" type="video/mp4">
-                                        <source src="{!! asset($value['path']) !!}" type="video/ogg">
-                                        Your browser does not support the video tag.
-                                    </video>
+                                            @else
+                                            <audio style="width: 100%" controls>
+                                            <source src="{!! asset($value['path']) !!}" type="audio/ogg">
+                                            <source src="{!! asset($value['path']) !!}" type="audio/mpeg">
+                                            Your browser does not support the audio element.
+                                            </audio>
 
 
 
 
-                                @endif
+                                            @endif
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </td>
                         @if($value['path_image_video']!=null)
                         <td><img src="{{asset($value['path_image_video'])}}" width="100" class="img-thumbnail"></td>
@@ -73,7 +86,7 @@
                         <td>{{$value->artist->name}}</td>
                         <td>{{$value->genre->name}}</td>
                         <td>{{$value->user->name}}</td>
-                        <td>  <select   id="option" onchange="changeStatus({{$value['id']}},value)">
+                        <td>  <select   id="option" onchange="changeStatus({!! $value->id !!},this.value)">
                                 @if($value['status']==1)
                                     <option value="1">Active</option>
                                     <option value="0">disable</option>
@@ -99,9 +112,12 @@
 
         </div>
     </div>
+
+
     <script>
         function demo (msg){
-            if(window.confirm(msg)){
+            var a = window.confirm(msg);
+            if(a){
                 return true;
             }else{
                 return false;
@@ -115,7 +131,6 @@
             var xmlhttp = new XMLHttpRequest();
             xmlhttp.onreadystatechange = new function(){
                 if(this.readyState==4 && this.status==200){
-                    // document.getElementById('option').innerHTML=this.responseText;
 
                 }
             }

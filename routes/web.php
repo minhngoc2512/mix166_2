@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', 'PagesController@getHomePage');
+Route::get('/', 'HomeController@getHomePage');
 Route::get('demo',function(){
     return view('user.video.list');
 });
@@ -24,7 +24,7 @@ Route::get('logoutUser',function(){
     return redirect()->route('home');
 });
 Auth::routes();
-Route::get('/home', 'PagesController@getHomePage')->name('home');
+Route::get('/home', 'HomeController@getHomePage')->name('home');
 
 
 Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
@@ -63,7 +63,7 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
     Route::group(['prefix'=>'genre'],function(){
         Route::get('list','admin\GenresController@getList');
         Route::get('edit/{id}','admin\GenresController@edit');
-        Route::get('delete/{id}','admin\GenreController@delete');
+        Route::get('delete/{id}','admin\GenresController@delete');
         Route::post('add',['as'=>'addGenre','uses'=>'admin\GenresController@add']);
         Route::post('update',['as'=>'updateGenre','uses'=>'admin\GenresController@update']);
         Route::get('add',function(){
@@ -81,8 +81,8 @@ Route::group(['prefix'=>'admin','middleware'=>'auth'],function(){
         Route::get('listDisable','admin\FilesController@getListDisable');
     });
 });
-Route::get('cate/{name}','PagesController@getmenu');
-Route::get('file/{name}','PagesController@runFile');
+Route::get('cate/{name}','CategoryController@getmenu');
+Route::get('file/{name}','FileController@runFile');
 Route::get('search/{key}','PagesController@search');
 Route::post('Userlogin',['as'=>'UserLogin','uses'=>'PagesController@login']);
 Route::post('UserRegistration',['as'=>'user/registration','uses'=>'PagesController@register']);

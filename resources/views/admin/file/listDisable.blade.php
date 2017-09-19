@@ -15,8 +15,8 @@
                 <tr>
                     <th>Id</th>
                     <th>Name</th>
-                    <th>Path</th>
-                    <th>User_id</th>
+                    <th>PLay media</th>
+                    <th>User Create</th>
                     <th>Status</th>
                     <th>Created at</th>
                     <th>Updated at</th>
@@ -30,34 +30,52 @@
                         <td>{{$value->id}}</td>
                         <td>{{$value->name}}</td>
                         <td>
-                            <?php
-                            $type = explode('.',$value->path)[count(explode('.',$value->path))-1];
-                            ?>
-                            @if($type=='mp4')
-                                <video width="320" height="240" controls>
-                                    <source src="{!! asset($value->path) !!}" type="video/mp4">
-                                    <source src="{!! asset($value->path) !!}" type="video/ogg">
-                                    Your browser does not support the video tag.
-                                </video>
-                                @elseif($type=='mp3')
-                                <audio controls>
-                                    <source src="{!! asset($value->path) !!}" type="audio/ogg">
-                                    <source src="{!! asset($value->path) !!}" type="audio/mpeg">
-                                    Your browser does not support the audio element.
-                                </audio>
-                                @else
-                                    <video width="320" height="240" controls>
-                                        <source src="{!! asset($value->path) !!}" type="video/mp4">
-                                        <source src="{!! asset($value->path) !!}" type="video/ogg">
-                                        Your browser does not support the video tag.
-                                    </video>
+                            <p > <!-- Trigger the modal with a button -->
+                                <button type="button" class="btn btn-info btn-lg" data-toggle="modal" data-target="#playMedia_{!!$value->id!!}"><i class="fa fa-play" aria-hidden="true"></i></button></p>
+
+                            <!-- Modal -->
+                            <div id="playMedia_{!!$value->id!!}" class="modal fade" role="dialog">
+                                <div class="modal-dialog">
+
+                                    <!-- Modal content-->
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                            <h4 class="modal-title">Play media {{$value->name}}</h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            @if($value->format_file=='video')
+                                                <video width="320" height="240" controls>
+                                                    <source src="{!! asset($value['path']) !!}" type="video/mp4">
+                                                    <source src="{!! asset($value['path']) !!}" type="video/ogg">
+                                                    Your browser does not support the video tag.
+                                                </video>
 
 
-                            @endif
+
+                                            @else
+                                                <audio style="width: 100%" controls>
+                                                    <source src="{!! asset($value['path']) !!}" type="audio/ogg">
+                                                    <source src="{!! asset($value['path']) !!}" type="audio/mpeg">
+                                                    Your browser does not support the audio element.
+                                                </audio>
+
+
+
+
+                                            @endif
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
                         </td>
 
 
-                        <td>{{$value->user_id}}</td>
+                        <td>{{$value->Artist->name}}</td>
                         <td >
 
                                 <select   id="option" onchange="changeStatus({{$value->id}},value)">

@@ -15,6 +15,7 @@ class CreateUserFavoriteTable extends Migration
     {
         Schema::create('user-favorite',function(Blueprint $table){
             $table->increments('id');
+            $table->softDeletes();
             $table->integer('user_id')->unsigned();
             $table->integer('file_id')->unsigned();
 

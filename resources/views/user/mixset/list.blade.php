@@ -69,8 +69,9 @@
                                               </div>
                                             </div>
                                             <div class="media-body">
-                                              <h2 class="song-name"><a href="{{url('file',['name'=>$value->slug_name])}}"
-                                                                       title="{{$value->artist->name}}">{{$value->name}}</a></h2>
+                                              <h2 class="song-name"><a
+                                                          href="{{url('file',['name'=>$value->slug_name])}}"
+                                                          title="{{$value->artist->name}}">{{$value->name}}</a></h2>
                                             </div>
                                           </div>
                                       </span></span></td>
@@ -86,15 +87,15 @@
                                         <b class="tablesaw-cell-label">Genre</b>
                                         <span class="tablesaw-cell-content"><p class="genre">
                                                 <a href="{{url('genres',['name'=>$value->genre->name])}}"
-                                                   title="{{$value->genre->name}}"> {{$value->genre->name}} </a>
-                    </p>
-  </span>
+                                                   title="{{$value->genre->name}}"> {{$value->genre->name}} </a></p>
+                                                                            </span>
                                     </span>
                                     </td>
                                     <td class="date d2"><b class="tablesaw-cell-label">RELEASE DATE</b><span
                                                 class="tablesaw-cell-content"><b
                                                     class="tablesaw-cell-label">RELEASE DATE</b><span
-                                                    class="tablesaw-cell-content"><p>{{$value->created_at}}</p></span></span></td>
+                                                    class="tablesaw-cell-content"><p>{{$value->created_at}}</p></span></span>
+                                    </td>
                                     <td>
                                         <!--<a href="javascript:void(0)" title="" class="btn-buy">buy</a>-->
                                         <a href="javascript:void(0)" data-object-id="2000388" data-object-type="edm_mix"
@@ -105,7 +106,6 @@
                                 </tr>
                                 <?php $i++?>
                             @endforeach
-
 
 
                             </tbody>

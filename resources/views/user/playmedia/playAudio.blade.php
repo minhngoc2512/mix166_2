@@ -10,7 +10,7 @@
                 <div class="col-md-2 hidden-sm">
                     <div class="box-img" >
                         <img class="bgi img-circle"  src="http://st.mix166.com/html/images/spacer.gif"
-                             style="background-image: url({{asset($data[0]->artist_image)}});width: 200px;height: 200px "
+                             style="background-image: url({{asset($data->Artist->image)}});width: 200px;height: 200px "
 
                              alt="Summer Dreams - Best Of Vocal Deep House 2017 &amp; Tropical Music">
                     </div>
@@ -20,28 +20,27 @@
                         <div class="player-info">
                             <div class="row">
                                 <div class="col-lg-7 col-sm-6">
-                                    <h1 class="song-name">{{$data[0]->file_name}}</h1>
+                                    <h1 class="song-name">{{$data->name}}</h1>
                                     <h2 class="song-singer">
-                                        <a href="/dj/v-a-2000864.html" title="V.A"> {{$data[0]->artist_name}} </a>
+                                        <a href="/dj/v-a-2000864.html" title="V.A"> {{$data->Artist->name}} </a>
 
 
                                     </h2>
                                     <div class="tags">
                                         <ul class="list-inline">
                                             <li><a class="btn btn-tag btn-xs" href="/mixsets/?genre=2000000"
-                                                   role="button">#Deep House</a></li>
-                                            <li><a class="btn btn-tag btn-xs" href="/mixsets/?genre=2000009"
-                                                   role="button">#Tropical House</a></li>
+                                                   role="button">#{{$data->Genre->name}}</a></li>
+                                            
                                         </ul>
                                     </div>
                                 </div>
                                 <div class="col-lg-5 col-sm-6">
                                     <div class="pm-statistic">
                                         <ul class="list-inline">
-                                            <li>{{$data[0]->view_count}} <br><br>
+                                            <li>{{$data->count_view}}<br><br>
                                                 <small>PLAYS</small>
                                             </li>
-                                            <li ><span id="like-count">{{$favorite[0]->favorite}}</span> <br><br>
+                                            <li ><span id="like-count">{{$favorite}}</span> <br><br>
                                                 <small>LIKES</small>
                                             </li>
                                             <li>4 <br><br>
@@ -61,7 +60,7 @@
                                 <audio style="width: 70%;background-color: red"  controls autoplay="">
                                     <!--                        <source src="--><!--?//=$link_mp3;?-->
                                     <!--" type='audio/mp3' />-->
-                                    <source src="{{asset($data[0]->file_path)}}"
+                                    <source src="{{asset($data->path)}}"
                                             type="audio/mp3">
                                 </audio>
                                 <br><br>
@@ -87,13 +86,13 @@
                         <div class="col-sm-3">
                             <div class="play-music-singer">
 
-                                <a onclick="userFavorite({{$data[0]->file_id}})"
+                                <a onclick="userFavorite({{$data->id}})"
                                    class="btn btn-outline"> <i class="glyph-icon flaticon-favorite"></i> Favorite</a>
                             </div>
                         </div>
                         <div class="col-sm-9">
                             <div class="fb-comments"
-                                 data-href="https://developers.facebook.com/docs/plugins/comments#lengshop2512_<?=$data[0]->file_id?>"
+                                 data-href="https://developers.facebook.com/docs/plugins/comments#lengshop2512_{!!$data->id!!}"
                                  data-numposts="5"></div> <!--  <div class="play-more-text">
                                <p>Trong đêm thi được đánh giá khá khó này bởi rock vốn không phải là sở trường của các thí sinh, nhóm Hương Tràm nổi trội khá rõ rệt nhờ cách chọn bài khéo léo, tạo xúc cảm cho người nghe qua Tâm hồn của đá. Sáng tác gắn liền với nhiều thế hệ khán giả của Trần Lập được khoác lên mình lớp áo mới với bản hòa âm phối khí theo thể loại drum bass. Bên cạnh đó, với lợi thế chất giọng nội lực và đầy cháy bỏng, quán quân The Voice mùa 1 biết cách đẩy tiết mục của mình lúc cao trào, lúc sâu lắng một cách linh loạt.</p>
                              </div> -->
@@ -116,15 +115,15 @@
                         @foreach($random as $value)
                         <div class="media">
                             <div class="media-left">
-                                <a class="link-img" href="{{url('file',['id'=>$value->file_id ])}}"><img
+                                <a class="link-img" href="{{url('file',['id'=>$value->id ])}}"><img
                                             src="http://st.mix166.com/html/images/spacer.gif"
-                                            style="background-image: url({{asset($value->artist_image)}});"
+                                            style="background-image: url({{asset($value->Artist->image)}});"
                                             alt=""></a>
                             </div>
                             <div class="media-body">
-                                <h2 class="global-name"><a href="{{url('file',['id'=>$value->file_id ])}}">{{$value->file_name}}</a></h2>
+                                <h2 class="global-name"><a href="{{url('file',['id'=>$value->id ])}}">{{$value->name}}</a></h2>
                                 <h3 class="global-author">
-                                    <a href="{{url('file',['id'=>$value->file_id])}}">{{$value->artist_name}}</a>
+                                    <a href="{{url('file',['id'=>$value->id])}}">{{$value->Artist->name}}</a>
                                 </h3>
                                 <ul class="details list-inline">
                                     <li><a href="#" title="" class="play"><i class="flaticon-arrows"></i>351</a></li>
@@ -151,7 +150,7 @@
                     document.getElementById('like-count').innerHTML=this.responseText;
                 }
             }
-            xmlhttp.open("GET","./favorite/{{$data[0]->file_id}}",true);
+            xmlhttp.open("GET","./favorite/{{$data->id}}",true);
             xmlhttp.send();
 
         }

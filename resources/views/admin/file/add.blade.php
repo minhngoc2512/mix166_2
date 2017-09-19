@@ -8,8 +8,8 @@
                     <h1 class="page-header">Add File</h1>
                 </div>
             </div>
-            @include('admin.logerror.error')
-            <!-- ... Your content goes here ... -->
+        @include('admin.logerror.error')
+        <!-- ... Your content goes here ... -->
 
             <form action="{{route('addFile')}}" method="post" enctype="multipart/form-data">
                 <div class="form-group">
@@ -21,13 +21,13 @@
                     <label>Insert file</label>
                     <select onchange="insertFile(this.value)" class="form-control">
                         <option value="url"> Type Url</option>
-                        <option value="file" >Type file</option>
+                        <option value="file">Type file</option>
                     </select>
 
-                    <div id="file" >
+                    <div id="file">
                         <label>Url:</label>
 
-                        <input class="form-control" type="text" placeholder="Enter url"  name="url" />
+                        <input class="form-control" type="text" placeholder="Enter url" name="url"/>
 
                     </div>
 
@@ -59,8 +59,15 @@
 
                 </div>
                 <div class="form-group">
+                    <label>Choose format file</label>
+                    <select name="format_file" class="form-control">
+                        <option value="video">Video</option>
+                        <option value="audio">Audio</option>
+                    </select>
+                </div>
+                <div class="form-group">
                     <label>Choose genre</label>
-                    <select name="gen" class="form-control" >
+                    <select name="gen" class="form-control">
                         <?php
                         foreach ($genre as $gen) {
                             echo "<option value='" . $gen['id'] . "'>" . $gen['name'] . "</option>";
@@ -86,25 +93,25 @@
         </div>
     </div>
     <script>
-    function checkVideo(i){
-        if(i==1){
-            document.getElementById('insert_image').innerHTML = '<div class="form-group"><label>Insert Image for video:</label><input type="file" name="image_video" class="form-control" > </div>';
-        }else{
-            document.getElementById('insert_image').innerHTML =' ';
+        function checkVideo(i) {
+            if (i == 1) {
+                document.getElementById('insert_image').innerHTML = '<div class="form-group"><label>Insert Image for video:</label><input type="file" name="image_video" class="form-control" > </div>';
+            } else {
+                document.getElementById('insert_image').innerHTML = ' ';
+
+            }
 
         }
+        function insertFile(i) {
+            if (i != 'url') {
 
-    }
-    function insertFile(i){
-        if(i!='url'){
+                document.getElementById('file').innerHTML = ' <label>File:</label><input class="form-control" type="file" name="file"/>';
+            } else {
+                document.getElementById('file').innerHTML = '  <label>Url:</label><input class="form-control" type="text" placeholder="Enter url"  name="url" />';
 
-            document.getElementById('file').innerHTML = ' <label>File:</label><input class="form-control" type="file" name="file"/>';
-        }else{
-            document.getElementById('file').innerHTML ='  <label>Url:</label><input class="form-control" type="text" placeholder="Enter url"  name="url" />';
+            }
 
         }
-
-    }
     </script>
 
 @endsection
